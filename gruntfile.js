@@ -8,7 +8,15 @@ module.exports = function(grunt) {
             build: {
                 src: ['./app/**/*.ts'],
                 options: {
-                    experimentalDecorators: true
+                    target: 'es5',
+                    module: 'commonjs',
+                    moduleResolution: 'node',
+                    sourceMap: false,
+                    emitDecoratorMetadata: false,
+                    experimentalDecorators: true,
+                    lib: ['es2015', 'dom'],
+                    noImplicitAny: true,
+                    suppressImplicitAnyIndexErrors: true
                 }
             }
         }
