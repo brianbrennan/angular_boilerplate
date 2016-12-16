@@ -36,8 +36,24 @@ module.exports = function(grunt) {
                 }
             }
 
+        },
+        //string replace options for build
+        'string-replace': {
+            build: {
+                files: {
+                    'dist/': './index.html'
+                },
+                options: {
+                    replacements: [
+                        {
+                            pattern: 'devApp',
+                            replacement: 'prodApp'
+                        }
+                    ]
+                }
+            }
         }
     });
 
-    grunt.registerTask('build', ['ts:build', 'sass']);
+    grunt.registerTask('build', ['ts:build', 'sass:dist', 'string-replace:build']);
 };

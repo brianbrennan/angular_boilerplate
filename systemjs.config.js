@@ -29,8 +29,12 @@
         },
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {
-            app: {
+            devApp: {
                 main: './main/bootstrap.js',
+                defaultExtension: 'js'
+            },
+            prodApp: {
+                main: './dist/app.js',
                 defaultExtension: 'js'
             },
             rxjs: {
