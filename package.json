@@ -2,7 +2,7 @@
   "name": "angular_boilerplate",
   "version": "1.0.0",
   "description": "A boilerplate that can be used to spin up new Angular apps",
-  "main": "index.js",
+  "main": "./app/main/bootstrap.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

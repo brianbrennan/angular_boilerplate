@@ -46,8 +46,8 @@ module.exports = function(grunt) {
                 options: {
                     replacements: [
                         {
-                            pattern: 'devApp',
-                            replacement: 'prodApp'
+                            pattern: 'System.import(\'app\')',
+                            replacement: 'System.import(\'dist\')'
                         }
                     ]
                 }
