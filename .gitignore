@@ -45,3 +45,10 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# IDE Files
+.idea
+
+# Directories that should only be used in builds
+node_modules
+lib
