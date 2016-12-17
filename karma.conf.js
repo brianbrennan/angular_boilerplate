@@ -5,28 +5,23 @@ module.exports = function(config) {
 
         frameworks: ['jasmine'],
 
-        preprocessors: {
-            'test/**/*.js': 'systemjs',
-            'app/**/*.js': 'systemjs'
-        },
-
         files: [
-            // // Polyfills.
-            // './node_modules/core-js/client/shim.min.js',
-            //
-            // 'node_modules/reflect-metadata/Reflect.js',
-            //
-            // // System.js for module loading
-            // 'node_modules/systemjs/dist/system-polyfills.js',
-            // 'node_modules/systemjs/dist/system.src.js',
-            //
-            // // Zone.js dependencies
-            // 'node_modules/zone.js/dist/zone.js',
-            // 'node_modules/zone.js/dist/proxy.js',
-            // 'node_modules/zone.js/dist/sync-test.js',
-            // 'node_modules/zone.js/dist/jasmine-patch.js',
-            // 'node_modules/zone.js/dist/async-test.js',
-            // 'node_modules/zone.js/dist/fake-async-test.js',
+            // Polyfills.
+            './node_modules/core-js/client/shim.min.js',
+
+            'node_modules/reflect-metadata/Reflect.js',
+
+            // System.js for module loading
+            'node_modules/systemjs/dist/system-polyfills.js',
+            'node_modules/systemjs/dist/system.src.js',
+
+            // Zone.js dependencies
+            'node_modules/zone.js/dist/zone.js',
+            'node_modules/zone.js/dist/proxy.js',
+            'node_modules/zone.js/dist/sync-test.js',
+            'node_modules/zone.js/dist/jasmine-patch.js',
+            'node_modules/zone.js/dist/async-test.js',
+            'node_modules/zone.js/dist/fake-async-test.js',
 
             // RxJs.
             { pattern: 'node_modules/rxjs/**/*.js', included: false, watched: false },
@@ -42,7 +37,7 @@ module.exports = function(config) {
 
             // Our built application code and tests
             {pattern: 'app/**/*.js', included: false, watched: true},
-            {pattern: 'test/**/*.js', included: true, watched: true},
+            {pattern: 'test/**/*.js', included: false, watched: true},
 
             // paths loaded via Angular's component compiler
             // (these paths need to be rewritten, see proxies section)
@@ -56,6 +51,11 @@ module.exports = function(config) {
             {pattern: 'test/**/*.js.map', included: false, watched: false}
 
         ],
+
+        client: {
+            builtPaths: ['app/**/*.js', 'test/**/*.js'], // add more spec base paths as needed
+            clearContext: false // leave Jasmine Spec Runner output visible in browser
+        },
 
         reporters: ['mocha'],
         port: 9876,
