@@ -8,7 +8,6 @@ module.exports = function(grunt) {
         ts: {
             build: {
                 src: ['./app/**/*.ts'],
-                out: './dist/app.js',
                 options: {
                     target: 'es5',
                     module: 'system',
@@ -46,14 +45,44 @@ module.exports = function(grunt) {
                 options: {
                     replacements: [
                         {
-                            pattern: 'System.import(\'app\')',
-                            replacement: 'System.import(\'dist\')'
+                            pattern: '<script src="./node_modules/core-js/client/shim.min.js"></script>',
+                            replacement: ''
+                        },
+                        {
+                            pattern: '<script src="./node_modules/zone.js/dist/zone.js"></script>',
+                            replacement: ''
+                        },
+                        {
+                            pattern: '<script src="./node_modules/reflect-metadata/Reflect.js"></script>',
+                            replacement: ''
+                        },
+                        {
+                            pattern: '<script src="./node_modules/systemjs/dist/system.src.js"></script>',
+                            replacement: ''
+                        },
+                        {
+                            pattern: './systemjs.config.js',
+                            replacement: './app.js'
                         }
+                    ]
+                }
+            }
+        },
+        //bundle scripts into single file
+        browserify: {
+            build: {
+                files: {
+                    './dist/app.js': ['./node_modules/core-js/client/shim.min.js',
+                        './node_modules/zone.js/dist/zone.js',
+                        './node_modules/reflect-metadata/Reflect.js',
+                        './node_modules/systemjs/dist/system.src.js',
+                        './systemjs.config.js',
+                        './app/main/bootstrap.js'
                     ]
                 }
             }
         }
     });
 
-    grunt.registerTask('build', ['ts:build', 'sass:dist', 'string-replace:build']);
+    grunt.registerTask('build', ['ts:build', 'sass:dist', 'browserify:build', 'string-replace:build']);
 };
