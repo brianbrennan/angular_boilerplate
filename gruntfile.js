@@ -26,12 +26,20 @@ module.exports = function(grunt) {
         },
         //sass compilation options
         sass: {
-            options: {
-                sourceMap: false
-            },
             build: {
                 files: {
                     './dist/styles.css': './app/globals/assets/scss/main.scss'
+                },
+                options: {
+                    sourceMap: false
+                }
+            },
+            watch: {
+                files: {
+                    './app/globals/assets/styles.css': './app/globals/assets/scss/main.scss'
+                },
+                options: {
+                    sourceMap: true
                 }
             }
 
@@ -92,8 +100,38 @@ module.exports = function(grunt) {
                     './node_modules/systemjs/dist/system.src.js'],
                 dest: 'dist'
             }
+        },
+        //watch task for local development
+        watch: {
+            sass: {
+                files: 'app/**/*.scss',
+                tasks: ['sass:watch']
+            },
+            html: {
+                files: 'app/**/*.html'
+            },
+            options: {
+                livereload: true,
+                spawn: false
+            }
+        },
+        //simple http server for serving angular file in local development
+        connect: {
+            localDev: {
+                options: {
+                    port: 9000,
+                    base: './'
+                }
+            },
+            builtSite: {
+                options: {
+                    port: 7000,
+                    base: './dist/'
+                }
+            }
         }
     });
 
     grunt.registerTask('build', ['ts:build', 'sass:build', 'string-replace:build', 'systemjs:build', 'copy:build']);
+    grunt.registerTask('devWatch', ['sass:watch', 'connect:localDev', 'watch']);
 };
