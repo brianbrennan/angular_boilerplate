@@ -52,3 +52,4 @@ Temporary Items
 # Directories that should only be used in builds
 node_modules
 lib
+dist
