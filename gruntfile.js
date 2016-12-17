@@ -8,7 +8,6 @@ module.exports = function(grunt) {
         ts: {
             build: {
                 src: ['./app/**/*.ts'],
-                out: './dist/app.js',
                 options: {
                     target: 'es5',
                     module: 'system',
@@ -30,7 +29,7 @@ module.exports = function(grunt) {
             options: {
                 sourceMap: false
             },
-            dist: {
+            build: {
                 files: {
                     './dist/styles.css': './app/globals/assets/scss/main.scss'
                 }
@@ -46,14 +45,55 @@ module.exports = function(grunt) {
                 options: {
                     replacements: [
                         {
-                            pattern: 'System.import(\'app\')',
-                            replacement: 'System.import(\'dist\')'
+                            pattern: '<script src="./systemjs.config.js"></script>',
+                            replacement: ''
+                        },
+                        {
+                            pattern: '<script> System.import(\'app\').catch(function(err){ console.error(err); }); </script>',
+                            replacement: ''
+                        },
+                        {
+                            pattern: '<script src="./node_modules/systemjs/dist/system.src.js"></script>',
+                            replacement: '<script src="./bundle.js"></script>'
+                        },
+                        {
+                            pattern: '<link rel="stylesheet" href="./app/globals/assets/styles.css">',
+                            replacement: '<link rel="stylesheet" href="styles.css">'
                         }
                     ]
                 }
             }
+        },
+        //Bundle files via systemjs-builder
+        systemjs: {
+            build: {
+                options: {
+                    sfx: true,
+                    baseURL: "./",
+                    configFile: "./systemjs.config.js",
+                    minify: true,
+                    sourceMaps: false,
+                    build: {
+                        mangle: false
+                    }
+                },
+                files: [{
+                    "src":  "./app/main/bootstrap.js",
+                    "dest": "./dist/bundle.js"
+                }]
+            }
+        },
+        //copy files -> meant for templates in build
+        copy: {
+            build: {
+                expand: true,
+                src: ['./app/**/*.html','./node_modules/core-js/client/shim.min.js',
+                    './node_modules/zone.js/dist/zone.js', './node_modules/reflect-metadata/Reflect.js',
+                    './node_modules/systemjs/dist/system.src.js'],
+                dest: 'dist'
+            }
         }
     });
 
-    grunt.registerTask('build', ['ts:build', 'sass:dist', 'string-replace:build']);
+    grunt.registerTask('build', ['ts:build', 'sass:build', 'string-replace:build', 'systemjs:build', 'copy:build']);
 };

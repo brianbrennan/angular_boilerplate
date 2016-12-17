@@ -12,6 +12,7 @@
         map: {
             // our app is within the app folder
             app: './app',
+            dist: './dist',
 
             // angular bundles
             '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
@@ -34,7 +35,7 @@
                 defaultExtension: 'js'
             },
             dist: {
-                main: './app.js',
+                main: '../app.js',
                 defaultExtension: 'js'
             },
             rxjs: {
