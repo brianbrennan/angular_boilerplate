@@ -29,7 +29,7 @@ module.exports = function(grunt) {
             options: {
                 sourceMap: false
             },
-            dist: {
+            build: {
                 files: {
                     './dist/styles.css': './app/globals/assets/scss/main.scss'
                 }
@@ -45,44 +45,55 @@ module.exports = function(grunt) {
                 options: {
                     replacements: [
                         {
-                            pattern: '<script src="./node_modules/core-js/client/shim.min.js"></script>',
+                            pattern: '<script src="./systemjs.config.js"></script>',
                             replacement: ''
                         },
                         {
-                            pattern: '<script src="./node_modules/zone.js/dist/zone.js"></script>',
-                            replacement: ''
-                        },
-                        {
-                            pattern: '<script src="./node_modules/reflect-metadata/Reflect.js"></script>',
+                            pattern: '<script> System.import(\'app\').catch(function(err){ console.error(err); }); </script>',
                             replacement: ''
                         },
                         {
                             pattern: '<script src="./node_modules/systemjs/dist/system.src.js"></script>',
-                            replacement: ''
+                            replacement: '<script src="./bundle.js"></script>'
                         },
                         {
-                            pattern: './systemjs.config.js',
-                            replacement: './app.js'
+                            pattern: '<link rel="stylesheet" href="./app/globals/assets/styles.css">',
+                            replacement: '<link rel="stylesheet" href="styles.css">'
                         }
                     ]
                 }
             }
         },
-        //bundle scripts into single file
-        browserify: {
+        //Bundle files via systemjs-builder
+        systemjs: {
             build: {
-                files: {
-                    './dist/app.js': ['./node_modules/core-js/client/shim.min.js',
-                        './node_modules/zone.js/dist/zone.js',
-                        './node_modules/reflect-metadata/Reflect.js',
-                        './node_modules/systemjs/dist/system.src.js',
-                        './systemjs.config.js',
-                        './app/main/bootstrap.js'
-                    ]
-                }
+                options: {
+                    sfx: true,
+                    baseURL: "./",
+                    configFile: "./systemjs.config.js",
+                    minify: true,
+                    sourceMaps: false,
+                    build: {
+                        mangle: false
+                    }
+                },
+                files: [{
+                    "src":  "./app/main/bootstrap.js",
+                    "dest": "./dist/bundle.js"
+                }]
+            }
+        },
+        //copy files -> meant for templates in build
+        copy: {
+            build: {
+                expand: true,
+                src: ['./app/**/*.html','./node_modules/core-js/client/shim.min.js',
+                    './node_modules/zone.js/dist/zone.js', './node_modules/reflect-metadata/Reflect.js',
+                    './node_modules/systemjs/dist/system.src.js'],
+                dest: 'dist'
             }
         }
     });
 
-    grunt.registerTask('build', ['ts:build', 'sass:dist', 'browserify:build', 'string-replace:build']);
+    grunt.registerTask('build', ['ts:build', 'sass:build', 'string-replace:build', 'systemjs:build', 'copy:build']);
 };
